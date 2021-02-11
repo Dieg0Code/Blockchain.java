@@ -1,31 +1,37 @@
+package blockchainjava;
+
+import java.security.Security;
 import java.util.ArrayList;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.Base64;
+import java.util.HashMap;
+
 public class BlockchainJava {
 
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
+    public static HashMap<String, TransactionOutput> UTXOs = new HashMap<String, TransactionOutput>();
     public static int difficulty = 5;
+    public static Wallet walletA;
+    public static Wallet walletB;
 
     public static void main(String[] args) {
-        // Add our blocks to the blockchain ArrayList:
-        blockchain.add(new Block("Genesis Block", "0"));
-        System.out.println("Minando el bloque Genesis...");
-        blockchain.get(0).mineBlock(difficulty);
-
-        blockchain.add(new Block("Segundo bloque", blockchain.get(blockchain.size() - 1).hash));
-        System.out.println("Minando el segundo bloque...");
-        blockchain.get(1).mineBlock(difficulty);
-
-        blockchain.add(new Block("Tercer bloque", blockchain.get(blockchain.size() - 1).hash));
-        System.out.println("Minando el tercer bloque...");
-        blockchain.get(2).mineBlock(difficulty);
-
-        System.out.println("\nLa Blockchain valida? : " + isChainValid());
-
-        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
-        System.out.println("\nBlockchain: ");
-        System.out.println(blockchainJson);
+        // Setup Bounce castle as a Security provider
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        // Create the new wallets
+        walletA = new Wallet();
+        walletB = new Wallet();
+        // Test public and private keys
+        System.out.println("Private and public keys: ");
+        System.out.println(StringUtil.getStringFromKey(walletA.privateKey));
+        System.out.println(StringUtil.getStringFromKey(walletA.publicKey));
+        // Create a test transaction from walletA to walletB
+        Transaction transaction = new Transaction(walletA.publicKey, walletB.publicKey, 5, null);
+        transaction.generateSignature(walletA.privateKey);
+        // Verify the signature works and verify it from the public key
+        System.out.println("Is signature verified");
+        System.out.println(transaction.verifySignature());
     }
 
     // Any change to the blockchain's blocks will cause this method return false
