@@ -4,10 +4,6 @@ import java.security.*;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import com.google.gson.GsonBuilder;
-
-import java.util.List;
-
 public class StringUtil {
     // Applies Sha256 to a String and returns the result
     public static String applySha256(String input) {
@@ -64,13 +60,13 @@ public class StringUtil {
     public static String getMerkleRoot(ArrayList<Transaction> transactions) {
         int count = transactions.size();
         ArrayList<String> previousTreeLayer = new ArrayList<String>();
-        for(Transaction transaction : transactions) {
+        for (Transaction transaction : transactions) {
             previousTreeLayer.add(transaction.transactionId);
         }
         ArrayList<String> treeLayer = previousTreeLayer;
-        while(count > 1) {
+        while (count > 1) {
             treeLayer = new ArrayList<String>();
-            for(int i = 1; i < previousTreeLayer.size(); i++) {
+            for (int i = 1; i < previousTreeLayer.size(); i++) {
                 treeLayer.add(applySha256(previousTreeLayer.get(i - 1) + previousTreeLayer.get(i)));
             }
             count = treeLayer.size();
@@ -78,5 +74,10 @@ public class StringUtil {
         }
         String merkleRoot = (treeLayer.size() == 1) ? treeLayer.get(0) : "";
         return merkleRoot;
+    }
+
+    // Returns difficulty string target, to compare to hash. eg difficulty if 5 will return "00000"
+    public static String getDifficultyString(int difficulty) {
+        return new String(new char[difficulty]).replace('\0', '0');
     }
 }

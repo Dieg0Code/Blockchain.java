@@ -1,8 +1,7 @@
 package blockchainjava;
 
-import blockchainjava.StringUtil;
-
-import java.security.*;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 public class Transaction {
@@ -55,7 +54,7 @@ public class Transaction {
     // Returns true if new transaction could be created.
     public boolean processTransaction() {
 
-        if(verifySignature() == false) {
+        if (verifySignature() == false) {
             System.out.println("#Transaction Signature failed to verify");
             return false;
         }
@@ -66,19 +65,19 @@ public class Transaction {
         }
 
         // Check if transaction is valid:
-        if(getInputsValue() < BlockchainJava.minimumTransaction) {
+        if (getInputsValue() < BlockchainJava.minimumTransaction) {
             System.out.println("#Transaction Inputs to small: " + getInputsValue());
             return false;
         }
 
         // Add outputs to Unspent list
-        for(TransactionOutput o : outputs) {
+        for (TransactionOutput o : outputs) {
             BlockchainJava.UTXOs.put(o.id, o);
         }
 
         // remove transaction inputs from UTXO list as spent:
-        for(TransactionInput i : inputs) {
-            if(i.UTXO == null) continue;    // if Transaction can't be found skip it
+        for (TransactionInput i : inputs) {
+            if (i.UTXO == null) continue;    // if Transaction can't be found skip it
             BlockchainJava.UTXOs.remove(i.UTXO.id);
         }
         return true;
@@ -87,8 +86,8 @@ public class Transaction {
     // returns sum of inputs(UTXOs) values
     public float getInputsValue() {
         float total = 0;
-        for(TransactionInput i : inputs) {
-            if(i.UTXO == null) continue;    // if Transaction can't be found skip it
+        for (TransactionInput i : inputs) {
+            if (i.UTXO == null) continue;    // if Transaction can't be found skip it
             total += i.UTXO.value;
         }
         return total;
@@ -97,7 +96,7 @@ public class Transaction {
     // returns sum of outputs:
     public float getOutputsValue() {
         float total = 0;
-        for(TransactionOutput o : outputs) {
+        for (TransactionOutput o : outputs) {
             total += o.value;
         }
         return total;
