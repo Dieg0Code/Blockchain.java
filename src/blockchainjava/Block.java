@@ -32,6 +32,7 @@ public class Block {
     }
 
     //Increases nonce value until hash target is reached.
+    // For more info obout minig visit https://github.com/Dieg0Code/Blockchain.go/blob/main/blockchain/proof.go
     public void mineBlock(int difficulty) {
         merkleRoot = StringUtil.getMerkleRoot(transactions);
         String target = StringUtil.getDifficultyString(difficulty); //Create a string with difficulty * "0"
