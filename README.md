@@ -8,6 +8,7 @@ Una implementación de una blockchain en java :coffee:
 
 ![blockchain img](https://img.blogs.es/bloglenovo/wp-content/uploads/2018/02/what-is-the-blockchain-and-why-is-it-so-important.jpg)
 
+![java blockchain](img/javablockchain.png)
 ## Dependencies
 
 Este proyecto usa:
